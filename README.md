@@ -16,9 +16,10 @@ A publicly accessible object in a Google Bucket.
 
 ### Authorize
 
-The starting point of the OAuth dance.  This is the endpoint that will "authenticate" and "authorize" the
+The starting point of the OAuth dance.  This is the endpoint that will authenticate and authorize the
 user and redirect the user back to the specified `redirect_uri` with an "access code" that will be used by Bond in the
-next step of the OAuth dance.
+next step of the OAuth dance.  For this service, there is no authentication or authorization that will take place so it
+should just return immediately.
 
 #### Implementation
 
@@ -36,7 +37,7 @@ will be ignored.
 | redirect_uri | url      | URI that will be redirected to upon successful authentication and authorization.                                           |
 | state        | base64   | Encoded string representing arbitrary state information.  Will be returned unchanged as a query param on the redirect uri. |
 
-**Response Code** - `302`
+**Response Code** - `303`
 
 **Redirect URI** -
 

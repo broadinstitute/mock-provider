@@ -1,0 +1,10 @@
+{
+  "name": "mock-provider",
+  "version": "0.0.1",
+  "description": "Mock OAuth and Fence provider",
+  "private": true,
+  "dependencies": {
+    "@google-cloud/storage": "^1.7.0",
+    "uuid": "^3.3.2"
+  }
+}
