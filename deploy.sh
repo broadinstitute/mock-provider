@@ -66,4 +66,5 @@ docker run --rm \
     "gcloud config set project ${PROJECT_NAME} &&
      gcloud auth activate-service-account --key-file ${SOURCE_PATH}/${SERVICE_ACCT_KEY_FILE} &&
      cd ${SOURCE_PATH} &&
+     gsutil cp resources/well-known.json gs://wb-dev-mock-provider &&
      gcloud functions deploy authorize --runtime nodejs8 --trigger-http"
