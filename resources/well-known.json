@@ -1,3 +1,4 @@
 {
-  "authorization_endpoint": "https://us-central1-broad-dsde-dev.cloudfunctions.net/authorize"
+  "authorization_endpoint": "https://us-central1-broad-dsde-dev.cloudfunctions.net/authorize",
+  "token_endpoint": "https://us-central1-broad-dsde-dev.cloudfunctions.net/token"
 }

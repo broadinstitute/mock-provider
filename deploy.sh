@@ -67,4 +67,10 @@ docker run --rm \
      gcloud auth activate-service-account --key-file ${SOURCE_PATH}/${SERVICE_ACCT_KEY_FILE} &&
      cd ${SOURCE_PATH} &&
      gsutil cp resources/well-known.json gs://wb-dev-mock-provider &&
-     gcloud functions deploy authorize --runtime nodejs8 --trigger-http"
+     gsutil acl ch -u AllUsers:R gs://wb-dev-mock-provider/well-known.json &&
+     gsutil setmeta -h 'Cache-Control:private, max-age=0, no-transform' gs://wb-dev-mock-provider/well-known.json &&
+     gsutil cp resources/token-object.json gs://wb-dev-mock-provider &&
+     gsutil acl ch -u AllUsers:R gs://wb-dev-mock-provider/token-object.json &&
+     gsutil setmeta -h 'Cache-Control:private, max-age=0, no-transform' gs://wb-dev-mock-provider/token-object.json &&
+     gcloud functions deploy authorize --runtime nodejs8 --trigger-http &&
+     gcloud functions deploy token --runtime nodejs8 --trigger-http"

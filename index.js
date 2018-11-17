@@ -1,4 +1,5 @@
 const { authorizationHandler } = require('./authorize');
+const { exchangeHandler } = require('./exchange');
 
 function handleGET (req, res) {
     // Do something with the GET request
@@ -35,4 +36,10 @@ exports.helloHttp = (req, res) => {
 
 exports.authorize = (req, res) => {
     authorizationHandler(req, res)
-}
+};
+
+// Sticking with some convention and calling this endpoint "token" externally, but internally "exchange" because it's
+// more descriptive
+exports.token = (req, res) => {
+    exchangeHandler(req, res)
+};

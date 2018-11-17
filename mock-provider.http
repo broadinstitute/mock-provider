@@ -22,4 +22,18 @@ Accept: application/json
 GET https://us-central1-broad-dsde-dev.cloudfunctions.net/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fdo-something%23fence-callback
 Accept: application/json
 
+### Exchange Authorization Code
+
+POST http://localhost:8010/broad-dsde-dev/us-central1/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code=thisReallyCanBeAnythingItDoesNotMatter
+
+### Generate Access Token
+
+POST http://localhost:8010/broad-dsde-dev/us-central1/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token=AnyOldRandomString
+
 ###

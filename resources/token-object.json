@@ -1,0 +1,7 @@
+{
+  "access_token": "random.string.accesssToken",
+  "expires_in": 1200,
+  "id_token": "NeedsToBeGenerated",
+  "refresh_token": "random.string.refreshToken",
+  "token_type": "Bearer"
+}
