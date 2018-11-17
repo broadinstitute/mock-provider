@@ -4,7 +4,6 @@
   "description": "Mock OAuth and Fence provider",
   "private": true,
   "dependencies": {
-    "@google-cloud/storage": "^1.7.0",
     "uuid": "^3.3.2"
   }
 }
