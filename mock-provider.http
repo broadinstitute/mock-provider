@@ -11,13 +11,15 @@ GET https://us-central1-gpolumbo-practice-project.cloudfunctions.net/helloHttp
 Accept: application/json
 
 ###
-
+# no-redirect -> https://youtrack.jetbrains.com/issue/WI-20560
+@no-redirect
 GET http://localhost:8010/broad-dsde-dev/us-central1/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fdo-something%23fence-callback
 Accept: application/json
 
 ###
 
-GET http://localhost:8010/broad-dsde-dev/us-central1/authorize?foo=bar
+@no-redirect
+GET https://us-central1-broad-dsde-dev.cloudfunctions.net/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fdo-something%23fence-callback
 Accept: application/json
 
 ###
