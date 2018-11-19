@@ -56,6 +56,7 @@ docker run --rm -v $PWD:${SOURCE_PATH} \
   broadinstitute/dsde-toolbox render-templates.sh
 
 DEPLOYER_IMAGE=google/cloud-sdk:225.0.0
+BUCKET="gs://wb-dev-mock-provider"
 
 # Overriding ENTRYPOINT has some subtleties: https://medium.com/@oprearocks/how-to-properly-override-the-entrypoint-using-docker-run-2e081e5feb9d
 docker run --rm \
@@ -66,11 +67,7 @@ docker run --rm \
     "gcloud config set project ${PROJECT_NAME} &&
      gcloud auth activate-service-account --key-file ${SOURCE_PATH}/${SERVICE_ACCT_KEY_FILE} &&
      cd ${SOURCE_PATH} &&
-     gsutil cp resources/well-known.json gs://wb-dev-mock-provider &&
-     gsutil acl ch -u AllUsers:R gs://wb-dev-mock-provider/well-known.json &&
-     gsutil setmeta -h 'Cache-Control:private, max-age=0, no-transform' gs://wb-dev-mock-provider/well-known.json &&
-     gsutil cp resources/token-object.json gs://wb-dev-mock-provider &&
-     gsutil acl ch -u AllUsers:R gs://wb-dev-mock-provider/token-object.json &&
-     gsutil setmeta -h 'Cache-Control:private, max-age=0, no-transform' gs://wb-dev-mock-provider/token-object.json &&
-     gcloud functions deploy authorize --runtime nodejs8 --trigger-http &&
-     gcloud functions deploy token --runtime nodejs8 --trigger-http"
+     ./deploy/upload_to_bucket.sh resources/well-known.json ${BUCKET} &&
+     ./deploy/upload_to_bucket.sh resources/token-object.json ${BUCKET} &&
+     ./deploy/upload_to_bucket.sh resources/fake-sa-key.json ${BUCKET} &&
+     ./deploy/deploy_functions.sh"
