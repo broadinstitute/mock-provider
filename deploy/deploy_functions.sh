@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -x
 
-gcloud functions deploy authorize --runtime nodejs8 --trigger-http
-gcloud functions deploy token --runtime nodejs8 --trigger-http
+for cloud_fn in "authorize" "token" "key"; do
+    gcloud functions deploy ${cloud_fn} --runtime nodejs8 --trigger-http
+done
