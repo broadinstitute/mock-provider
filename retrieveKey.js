@@ -1,18 +1,16 @@
-const request = require('superagent');
+const { getObject } = require('./googleObjects');
 
-function getKey() {
-    return request.get("https://storage.googleapis.com/wb-dev-mock-provider/fake-sa-key.json")
-        .then((response) => {
-            return response.text;
-        })
-        .catch((err) => {
-            console.error(new Error(`Failed while trying to retrieve token-object.json from Google Bucket.\n${err.message}\n${err.response}`))
+function retrieveKeyHandler(req, res) {
+    if (req.method === "POST") {
+        const serviceAcctKeyUrl = "https://storage.googleapis.com/wb-dev-mock-provider/fake-sa-key.json";
+        getObject(serviceAcctKeyUrl).then((key) => {
+            res.status(200).send(key);
+        }).catch((err) => {
+            res.status(500).send({error: err});
         });
-}
-
-async function retrieveKeyHandler(req, res) {
-    const key = await getKey();
-    res.status(200).send(key);
+    } else {
+        res.status(405).send({error: "Request method " + req.method + " is not permitted.  Method must be POST"});
+    }
 }
 
 exports.retrieveKeyHandler = retrieveKeyHandler;

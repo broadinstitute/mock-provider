@@ -1,22 +1,16 @@
-const request = require('superagent');
+const { getObject } = require('./googleObjects');
 
-function getTokenObject() {
-    return request.get("https://storage.googleapis.com/wb-dev-mock-provider/token-object.json")
-        .then((response) => {
-            return response.text;
-        })
-        .catch((err) => {
-            console.error(new Error(`Failed while trying to retrieve token-object.json from Google Bucket.\n${err.message}\n${err.response}`))
-        });
-}
-
-async function exchangeHandler(req, res) {
+function exchangeHandler(req, res) {
     if (req.method === "POST") {
         const grantType = req.body.grant_type;
         if (grantType === "authorization_code" || grantType === "refresh_token") {
             // This is a mock service, so we don't care at all about auth codes or refresh tokens
-            const tokenObject = await getTokenObject();
-            res.status(200).send(tokenObject);
+            const tokenObjectUrl = "https://storage.googleapis.com/wb-dev-mock-provider/token-object.json";
+            getObject(tokenObjectUrl).then((tokenObject) => {
+                res.status(200).send(tokenObject);
+            }).catch((err) => {
+                res.status(500).send({error: err});
+            })
         } else {
             res.status(400).send({error: "Invalid grant type.  Must be one of [authorization_code, refresh_token]"});
         }
