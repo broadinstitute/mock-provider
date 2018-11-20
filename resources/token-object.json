@@ -1,7 +1,7 @@
 {
   "access_token": "random.string.accesssToken",
   "expires_in": 1200,
-  "id_token": "NeedsToBeGenerated",
+  "id_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImppbW15YjAwNyIsImlhdCI6MTUxNjIzOTAyMn0.wvcAUVgwOKmO__S1xAaawBQmfJOO_8XxW9R9DeHF0Wo",
   "refresh_token": "random.string.refreshToken",
   "token_type": "Bearer"
 }
