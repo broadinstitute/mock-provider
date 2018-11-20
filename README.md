@@ -121,6 +121,10 @@ is:
 
 `{FENCE_BASE_URL}/user/credentials/google`
 
+The Service Account Key JSON will be stored in a publicly accessible Google Bucket (Read-only).  Therefore, it is 
+essential that this Service Account have no other permissions than the ability to read protected objects from wherever
+we store test DOS resolution objects.
+
 #### Implementation
 
 Implement as a Google Cloud Function because it needs to accept a `POST` request, but otherwise it can just regurgitate
@@ -133,6 +137,3 @@ a static JSON Service Account Key that we pull from a Google Bucket or something
 **Response Code** - `200`
 
 **Response Body** - JSON Service Account Key.
-
-_NOTE:_ This Service Account Key may need to be a real key because Bond's `getServiceAccountAccessToken` endpoint uses
-this key and Google libs to generate an Access Token for this key.
