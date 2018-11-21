@@ -6,39 +6,33 @@
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
 ###
-
-GET https://us-central1-gpolumbo-practice-project.cloudfunctions.net/helloHttp
-Accept: application/json
-
-###
 #no-redirect -> https://youtrack.jetbrains.com/issue/WI-20560
 #@no-redirect
-GET http://localhost:8010/broad-dsde-dev/us-central1/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fdo-something%23fence-callback
-Accept: application/json
-
-###
-
-#@no-redirect
-GET https://us-central1-broad-dsde-dev.cloudfunctions.net/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fdo-something%23fence-callback
+GET {{protocol-and-host}}/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fdo-something%23fence-callback
 Accept: application/json
 
 ### Exchange Authorization Code
 
-POST http://localhost:8010/broad-dsde-dev/us-central1/token
+POST {{protocol-and-host}}/token
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=authorization_code&code=thisReallyCanBeAnythingItDoesNotMatter
 
 ### Generate Access Token
 
-POST http://localhost:8010/broad-dsde-dev/us-central1/token
+POST {{protocol-and-host}}/token
 Content-Type: application/x-www-form-urlencoded
 
 grant_type=refresh_token&refresh_token=AnyOldRandomString
 
 ###
 
-POST http://localhost:8010/broad-dsde-dev/us-central1/user/credentials/google
+POST {{protocol-and-host}}/user/credentials/google
 Content-Type: application/x-www-form-urlencoded
+
+###
+
+GET {{protocol-and-host}}/user/.well-known/openid-configuration
+Accept: application/json
 
 ###
