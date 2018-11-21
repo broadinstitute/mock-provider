@@ -1,4 +1,5 @@
 const { getObject } = require('./googleObjects');
+const jwt = require('jsonwebtoken');
 
 function exchangeHandler(req, res) {
     if (req.method === "POST") {
@@ -7,6 +8,8 @@ function exchangeHandler(req, res) {
             // This is a mock service, so we don't care at all about auth codes or refresh tokens
             const tokenObjectUrl = "https://storage.googleapis.com/wb-dev-mock-provider/token-object.json";
             getObject(tokenObjectUrl).then((tokenObject) => {
+                tokenObject = JSON.parse(tokenObject)
+                tokenObject.id_token = jwt.sign({ username: 'jimmyb007' }, 'secret');
                 res.status(200).send(tokenObject);
             }).catch((err) => {
                 res.status(500).send({error: err});
