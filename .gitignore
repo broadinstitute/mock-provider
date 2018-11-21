@@ -1,3 +1,4 @@
 .idea/
 node_modules/
 deploy_account.json
+shared_sa_key.json

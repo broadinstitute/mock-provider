@@ -38,10 +38,13 @@ set -x
 
 PROJECT_NAME="broad-dsde-${ENVIRONMENT}"
 
-SERVICE_ACCT_KEY_FILE="deploy_account.json"
+DEPLOYER_SA_KEY_FILE="deploy_account.json"
 # Get the tier specific credentials for the service account out of Vault
 # Put key into SERVICE_ACCT_KEY_FILE
-docker run --rm -e VAULT_TOKEN=${VAULT_TOKEN} broadinstitute/dsde-toolbox vault read --format=json "secret/dsde/martha/${ENVIRONMENT}/deploy-account.json" | jq .data > ${SERVICE_ACCT_KEY_FILE}
+docker run --rm -e VAULT_TOKEN=${VAULT_TOKEN} broadinstitute/dsde-toolbox vault read --format=json "secret/dsde/martha/${ENVIRONMENT}/deploy-account.json" | jq .data > ${DEPLOYER_SA_KEY_FILE}
+
+SHARED_SA_KEY="shared_sa_key.json"
+docker run --rm -e VAULT_TOKEN=${VAULT_TOKEN} broadinstitute/dsde-toolbox vault read --format=json "secret/dsde/bond/mock-provider/user-service-account-key.json" | jq .data > ${SHARED_SA_KEY}
 
 SOURCE_PATH=/source
 # Process all Consul .ctmpl files
@@ -65,9 +68,9 @@ docker run --rm \
     -e BASE_URL="https://us-central1-broad-dsde-${ENVIRONMENT}.cloudfunctions.net" \
     ${DEPLOYER_IMAGE} -c \
     "gcloud config set project ${PROJECT_NAME} &&
-     gcloud auth activate-service-account --key-file ${SOURCE_PATH}/${SERVICE_ACCT_KEY_FILE} &&
+     gcloud auth activate-service-account --key-file ${SOURCE_PATH}/${DEPLOYER_SA_KEY_FILE} &&
      cd ${SOURCE_PATH} &&
      ./deploy/upload_to_bucket.sh resources/well-known.json ${BUCKET} &&
      ./deploy/upload_to_bucket.sh resources/token-object.json ${BUCKET} &&
-     ./deploy/upload_to_bucket.sh resources/fake-sa-key.json ${BUCKET} &&
+     ./deploy/upload_to_bucket.sh ${SHARED_SA_KEY} ${BUCKET} &&
      ./deploy/deploy_functions.sh"
