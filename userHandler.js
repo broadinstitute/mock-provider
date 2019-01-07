@@ -52,12 +52,14 @@ function invalidMethodResponse(req, res, validMethods) {
     res.status(405).send({error: `Invalid request method: ${req.method}.  Must be one of: [${validMethods}]`});
 }
 
+const googleCredentialsRegex = /\/credentials\/google(\/)?/;
+
 function handleUser(req, res) {
     if (req.path === "/oauth2/token") {
         handleTokenRequest(req, res)
     } else if (req.path === "/.well-known/openid-configuration" && req.method === "GET") {
         returnOpenIdConfig(res);
-    } else if (req.path === "/credentials/google") {
+    } else if (googleCredentialsRegex.test(req.path)) {
         handleGoogleCredentials(req, res);
     } else {
         res.status(400).send({error: "Unrecognized request.  POST to this url to get the Service Account Key.  Or issue a GET request with the path '/.well-known/openid-configuration'"});
