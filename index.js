@@ -1,6 +1,6 @@
 const { authorizationHandler } = require('./authorize');
 const { exchangeHandler } = require('./exchange');
-const { retrieveKeyHandler } = require('./retrieveKey');
+const { userHandler } = require('./userHandler');
 
 exports.authorize = (req, res) => {
     authorizationHandler(req, res);
@@ -16,5 +16,5 @@ exports.token = (req, res) => {
 // GCF just grabs the first part of the path when matching the function, so we don't need to do anything special to
 // match the full, required path.  FYI, if you want the full path from the code: `req.path`
 exports.user = (req, res) => {
-    retrieveKeyHandler(req, res);
+    userHandler(req, res);
 };
