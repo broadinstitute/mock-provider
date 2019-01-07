@@ -14,6 +14,11 @@ Needed so that Bond knows which urls to call during the OAuth dance.
 
 A publicly accessible object in a Google Bucket.
 
+**Path** - `/user/.well-known/openid-configuration`
+
+**Request Method** - `GET`
+
+
 ### Authorize
 
 The starting point of the OAuth dance.  This is the endpoint that will authenticate and authorize the
@@ -26,6 +31,8 @@ should just return immediately.
 Implemented as a Google Cloud Function because it needs to generate a URL and respond with a redirect.  Simply responds 
 with a redirect to the specified `redirect_uri` with a randomly generated `code` param in addition to the provided 
 `state` param. 
+
+**Path** - `/authorize` (additional values on the path are ignored)
 
 **Request Method** - `GET`
 
@@ -53,6 +60,7 @@ _Note:_ The `redirect_uri` may have a [Fragment Identifier](https://en.wikipedia
 case you will need to properly construct the new URI with the query params and fragment in the 
 [correct locations](https://en.wikipedia.org/wiki/URL#Syntax).
 
+
 ### Exchange Access Code
 
 After the client service is redirected to, it needs to take the `code` param from above response and `POST`
@@ -62,6 +70,8 @@ that back to this OAuth provider in order to obtain a "token response object".
 
 Implement as a Google Cloud Function because it needs to accept a `POST` request and must be an HTTPS url, but 
 otherwise it can just regurgitate a static "token response object" that we pull from a Google Bucket or something.
+
+**Path** - `/token` (additional values on the path are ignored)
 
 **Request Method** - `POST`
 
@@ -76,6 +86,7 @@ will be ignored.
 
 **Response Body** - JSON formatted "token response object".
 
+
 ### Generate Access Token
 
 Clients that have a Refresh Token can `POST` it back to this endpoint to generate a new Access Token. 
@@ -84,6 +95,8 @@ Clients that have a Refresh Token can `POST` it back to this endpoint to generat
 
 Implement as a Google Cloud Function because it needs to accept a `POST` request and must be an HTTPS url, but 
 otherwise it can just regurgitate a static "token response object" that we pull from a Google Bucket or something.
+
+**Path** - `/user/oauth2/token` (additional values on the path are ignored)
 
 **Request Method** - `POST`
 
@@ -104,10 +117,39 @@ don't.
 
 **Response Body** - JSON formatted "token response object".
 
+
 ### Revoke Access
 
-We are not implementing an endpoint for revoking access because there is no real functionality that calls this endpoint
-in Bond yet.
+Revoke a refresh token so that it cannot be used to generate new access tokens
+
+#### Implementation
+
+Implement as a Google Cloud Function because it needs to accept a `POST` request and must be an HTTPS url.
+
+**Path** - `/user/oauth2/token` (additional values on the path are ignored)
+
+**Request Method** - `POST`
+
+**Request Body** - A JSON object of the form `{"token": "any-non-empty-string"}` or form data with a 
+`token: non-empty-string` entry
+
+**Response Code** - `204`
+
+
+### Delete Google Credentials
+
+Delete Google credentials on the provider so that the user is "logged out" of the provider
+
+#### Implementation
+
+Implement as a Google Cloud Function because it needs to accept a `DELETE` request and must be an HTTPS url.
+
+**Path** - `/user/credentials/google` (additional values on the path are ignored)
+
+**Request Method** - `DELETE`
+
+**Response Code** - `204`
+
 
 ## Service Account Vending
 
@@ -130,9 +172,13 @@ we store test DOS resolution objects.
 Implement as a Google Cloud Function because it needs to accept a `POST` request, but otherwise it can just regurgitate
 a static JSON Service Account Key that we pull from a Google Bucket or something.
 
+**Path** - `/user/oauth2/token` (additional values on the path are ignored)
+
 **Request Method** - `POST`
 
 **Request Params** - None
+
+**Request Body** - None
 
 **Response Code** - `200`
 
